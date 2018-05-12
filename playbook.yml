@@ -1,0 +1,13 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  remote_user: root
+  roles:
+    - common
+
+- hosts: all
+  become: yes
+  remote_user: root
+  roles:
+    - telegram_proxy

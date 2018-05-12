@@ -1,0 +1,29 @@
+---
+- name: Download dante package
+  get_url:
+    url: http://ppa.launchpad.net/dajhorn/dante/ubuntu/pool/main/d/dante/dante-server_{{ dante_version }}_amd64.deb
+    dest: /root/dante-server_{{ dante_version }}_amd64.deb
+
+- name: Install dante
+  apt:
+    deb: /root/dante-server_{{ dante_version }}_amd64.deb
+
+- name: Copy danted.conf
+  template:
+    src: danted.conf.j2
+    dest: /etc/danted.conf
+  notify: restart danted
+
+- name: Encrypt password
+  when: defined socks_password
+  command: mkpasswd --method=sha-512
+  # TODO ↑↑↑
+
+- name: Create user
+  when: defined socks_user
+  user:
+    name: "{{ socks_user }}"
+    password: "{{ socks_enc_password }}"
+    shell: /usr/sbin/nologin
+    create_home: no
+    state: present
