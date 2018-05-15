@@ -56,3 +56,19 @@ socks pass { from: 0.0.0.0/0 to: .t.me }
 socks pass { from: 0.0.0.0/0 to: .telegram.me }
 socks pass { from: 0.0.0.0/0 to: .telegram.dog }
 socks pass { from: 0.0.0.0/0 to: .telegra.ph }
+
+# UDP for calls
+socks pass {
+    from: 0.0.0.0/0
+    to: 0.0.0.0/0
+    udp.portrange: 40000-45000
+    command: udpassociate
+    log: error connect disconnect
+}
+
+socks pass {
+    from: 0.0.0.0/0
+    to: 0.0.0.0/0
+    command: udpreply
+    log: error connect disconnect
+}

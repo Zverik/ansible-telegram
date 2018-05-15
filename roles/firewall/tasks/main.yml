@@ -12,11 +12,18 @@
 - name: Open SOCKS5 and SSH ports
   ufw:
     port: "{{ item }}"
-    proto: any
+    proto: tcp
     rule: allow
   with_items:
     - ssh
     - "{{ tport }}"
+  notify: restart ufw
+
+- name: Open UDP ports
+  ufw:
+    port: 40000:45000
+    proto: udp
+    rule: allow
   notify: restart ufw
 
 - name: Enable ufw logging
