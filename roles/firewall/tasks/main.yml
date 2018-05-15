@@ -1,0 +1,27 @@
+---
+- name: Install UFW
+  apt: name=ufw state=present
+
+- name: Configure ufw defaults
+  ufw: direction={{ item.direction }} policy={{ item.policy }}
+  with_items:
+    - { direction: 'incoming', policy: 'deny' }
+    - { direction: 'outgoing', policy: 'allow' }
+  notify: restart ufw
+
+- name: Open SOCKS5 and SSH ports
+  ufw:
+    port: "{{ item }}"
+    proto: any
+    rule: allow
+  with_items:
+    - ssh
+    - "{{ tport }}"
+  notify: restart ufw
+
+- name: Enable ufw logging
+  ufw: logging=on
+  notify: restart ufw
+
+- name: Enable ufw
+  ufw: state=enabled
