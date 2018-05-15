@@ -2,11 +2,15 @@
 
 logoutput: syslog /var/log/sockd.log
 
-internal: eth0 port = 1080
+internal: eth0 port = {{ tport }}
 external: eth0
 
 clientmethod: none
+{% if user is defined %}
 socksmethod: username
+{% else %}
+socksmethod: none
+{% endif %}
 
 user.privileged: root
 user.unprivileged: nobody
